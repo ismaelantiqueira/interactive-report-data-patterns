@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI for Business: Uncovering Hidden Patterns</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals with Blue Accent -->
+    <!-- Application Structure Plan: A guided, story-driven single-page application. The user flows from a high-level introduction to a comparison of Traditional vs. AI analytics. The core of the app is a tabbed interface exploring the three key patterns (Anomaly Hunter, Path Analyzer, Persona Architect), each with an explanation, an interactive visualization, and a real-world case study. The experience concludes with an actionable playbook. This structure was chosen to make a complex topic digestible and engaging for a non-technical business audience, guiding them through the concepts logically from 'why' to 'what' and 'how'. -->
+    <!-- Visualization & Content Choices: 
+        - Traditional vs. AI: Interactive tabs to compare concepts directly (HTML/JS). Justification: Clear, direct comparison.
+        - Anomaly Detection: Interactive line chart (Chart.js/Canvas) where users can trigger an anomaly. Justification: Visually demonstrates the concept of deviation from a baseline.
+        - Sequential Pattern Mining: A JS-animated process flow diagram. Justification: Emphasizes the *sequence* of events, which is the core of the pattern, better than a static chart.
+        - Behavioral Clustering: Interactive cards that "flip" to reveal AI-driven personas. Justification: Creates a "reveal" moment that highlights the discovery aspect of this pattern.
+        - Case Study Metrics: Presented as large, bold numbers in cards. Justification: Highlights tangible business impact.
+        - Gemini Integration: Added buttons with '✨' to generate contextual explanations, strategies, and ad copy, turning insights into actionable advice. A new "Strategy Sandbox" provides personalized strategic outlines. This directly connects the patterns to real-world business tasks.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F9FAFB;
+            color: #1F2937;
+        }
+        .nav-button {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .nav-button.active {
+            background-color: #3B82F6;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .nav-button:not(.active):hover {
+            background-color: #E5E7EB;
+        }
+        .content-panel {
+            display: none;
+        }
+        .content-panel.active {
+            display: block;
+        }
+        .path-step {
+            transition: all 0.5s ease-in-out;
+            opacity: 0.5;
+            transform: translateY(10px);
+        }
+        .path-step.highlight {
+            opacity: 1;
+            transform: translateY(0);
+            background-color: #DBEAFE;
+            border-color: #3B82F6;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 40vh;
+        }
+        .gemini-result-box {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            white-space: pre-wrap;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: #334155;
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #3B82F6;
+            animation: spin 1s ease infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header Section -->
+    <header class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 tracking-tight">Beyond the Trendline</h1>
+            <p class="mt-4 text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">Discover the hidden patterns in your data that AI can unlock to drive real business growth.</p>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+
+        <!-- Section 1: The New Intelligence -->
+        <section id="introduction" class="mb-20">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800">The New Intelligence: From Looking Back to Seeing Ahead</h2>
+                <p class="mt-4 text-lg text-gray-600 max-w-4xl mx-auto">Traditional analytics tells you what happened. AI-powered analytics shows you what will happen and what to do about it. This section demonstrates the fundamental shift from reactive reporting to proactive strategy, setting the stage for the powerful patterns we'll explore.</p>
+            </div>
+            <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div class="border-r-0 md:border-r border-gray-200 pr-0 md:pr-8">
+                        <h3 class="text-2xl font-bold mb-4 text-blue-600">Traditional Analytics</h3>
+                        <p class="text-gray-600 mb-4">Relies on structured data and human-led queries to describe and diagnose past events. It's essential for review but limited in scope and scale.</p>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <span class="text-blue-500 mr-3 mt-1">&#10003;</span>
+                                <div><strong class="text-gray-700">Function:</strong> Descriptive (What happened?)</div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-blue-500 mr-3 mt-1">&#10003;</span>
+                                <div><strong class="text-gray-700">Data Type:</strong> Primarily structured (databases, spreadsheets).</div>
+                            </li>
+                             <li class="flex items-start">
+                                <span class="text-blue-500 mr-3 mt-1">&#10003;</span>
+                                <div><strong class="text-gray-700">Insight:</strong> Identifies known trends and correlations.</div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="bg-blue-50 rounded-lg p-6">
+                        <h3 class="text-2xl font-bold mb-4 text-green-600">AI-Powered Pattern Recognition</h3>
+                        <p class="text-gray-600 mb-4">Leverages machine learning to analyze vast, complex datasets—including "dark data" like text and images—to predict future outcomes and recommend optimal actions.</p>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <span class="text-green-500 mr-3 mt-1">&#10003;</span>
+                                <div><strong class="text-gray-700">Function:</strong> Predictive & Prescriptive (What will happen? What should we do?).</div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-500 mr-3 mt-1">&#10003;</span>
+                                <div><strong class="text-gray-700">Data Type:</strong> Structured & Unstructured (text, images, sensors).</div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-500 mr-3 mt-1">&#10003;</span>
+                                <div><strong class="text-gray-700">Insight:</strong> Uncovers unknown, complex, and non-linear relationships.</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: The Three AI Patterns -->
+        <section id="patterns">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800">Three Powerful AI Patterns in Action</h2>
+                <p class="mt-4 text-lg text-gray-600 max-w-4xl mx-auto">Move beyond theory and see how AI identifies specific, non-obvious patterns to solve critical business problems. Each tab below reveals a different capability, complete with an interactive demonstration and a real-world success story.</p>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                <!-- Navigation Tabs -->
+                <nav class="flex border-b border-gray-200">
+                    <button id="nav-anomaly" class="nav-button flex-1 py-4 px-2 text-sm md:text-base font-medium text-gray-700 active">1. The Anomaly Hunter</button>
+                    <button id="nav-path" class="nav-button flex-1 py-4 px-2 text-sm md:text-base font-medium text-gray-700">2. The Path Analyzer</button>
+                    <button id="nav-persona" class="nav-button flex-1 py-4 px-2 text-sm md:text-base font-medium text-gray-700">3. The Persona Architect</button>
+                </nav>
+
+                <div class="p-6 md:p-8">
+                    <!-- Anomaly Hunter Panel -->
+                    <div id="panel-anomaly" class="content-panel active">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-800 mb-3">Detect Critical Deviations Before They Become Disasters</h3>
+                                <p class="text-gray-600 mb-6">AI-powered anomaly detection learns the complex signature of "normal" operations from thousands of variables. It then flags any subtle deviation that signals a future problem—from machinery failure to financial fraud—long before traditional, rule-based alerts would.</p>
+                                <button id="trigger-anomaly-btn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow transition-transform transform hover:scale-105">
+                                    Click to Trigger an Anomaly
+                                </button>
+                                <div id="anomaly-gemini-controls" class="mt-4 hidden">
+                                    <button id="explain-anomaly-btn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow transition-transform transform hover:scale-105">
+                                        ✨ Explain this Anomaly
+                                    </button>
+                                </div>
+                                <div id="anomaly-result-loader" class="mt-4 hidden"><div class="spinner"></div></div>
+                                <div id="anomaly-result" class="gemini-result-box hidden"></div>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="anomalyChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="mt-12 bg-gray-50 p-6 rounded-lg">
+                            <h4 class="font-bold text-lg text-gray-700 mb-2">Real-World Example: SUN Automation's Predictive Maintenance</h4>
+                            <p class="text-gray-600">SUN Automation used AI to monitor machinery data (vibration, temperature) and predict failures before they happened. This captured the "tribal knowledge" of retiring experts, digitizing their intuition to create a new service model based on selling operational uptime, a massive competitive advantage.</p>
+                        </div>
+                    </div>
+
+                    <!-- Path Analyzer Panel -->
+                    <div id="panel-path" class="content-panel">
+                       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-800 mb-3">Decode the "Why" Behind Customer Actions</h3>
+                                <p class="text-gray-600 mb-6">Sequential pattern mining uncovers the ordered "recipes" of behavior that lead to critical outcomes like conversion or churn. Instead of isolated actions, it reveals the time-based narrative of the customer journey, showing you exactly which paths to optimize and which to fix.</p>
+                                <button id="show-path-btn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow transition-transform transform hover:scale-105">
+                                    Click to Reveal Path to Churn
+                                </button>
+                                <div id="path-gemini-controls" class="mt-4 hidden">
+                                    <button id="suggest-strategy-btn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow transition-transform transform hover:scale-105">
+                                        ✨ Suggest Retention Strategies
+                                    </button>
+                                </div>
+                                <div id="path-result-loader" class="mt-4 hidden"><div class="spinner"></div></div>
+                                <div id="path-result" class="gemini-result-box hidden"></div>
+                            </div>
+                            <div id="path-visualizer" class="space-y-2">
+                                <div class="path-step p-3 border-l-4 border-gray-300 bg-gray-100 rounded-r-lg"><strong>Step 1:</strong> App opens decrease slightly.</div>
+                                <div class="path-step p-3 border-l-4 border-gray-300 bg-gray-100 rounded-r-lg"><strong>Step 2:</strong> Session times become shorter.</div>
+                                <div class="path-step p-3 border-l-4 border-gray-300 bg-gray-100 rounded-r-lg"><strong>Step 3:</strong> Song skip rate increases.</div>
+                                <div class="path-step p-3 border-l-4 border-gray-300 bg-gray-100 rounded-r-lg"><strong>Step 4:</strong> User stops creating playlists.</div>
+                                <div class="path-step p-3 border-l-4 border-red-300 bg-red-50 rounded-r-lg font-bold text-red-700"><strong>Outcome:</strong> High Churn Risk</div>
+                            </div>
+                        </div>
+                        <div class="mt-12 bg-gray-50 p-6 rounded-lg">
+                            <h4 class="font-bold text-lg text-gray-700 mb-2">Real-World Example: Spotify's Proactive Retention</h4>
+                            <p class="text-gray-600">Spotify analyzes sequences of user behavior (not just listening time) to predict churn. By identifying patterns of disengagement like increased song skipping or decreased playlist creation, they can trigger hyper-personalized re-engagement campaigns *before* a user cancels, a key to their industry-leading retention.</p>
+                        </div>
+                    </div>
+
+                    <!-- Persona Architect Panel -->
+                    <div id="panel-persona" class="content-panel">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                             <div>
+                                <h3 class="text-2xl font-bold text-gray-800 mb-3">Discover Your True Customer Tribes</h3>
+                                <p class="text-gray-600 mb-6">Move beyond flawed demographic stereotypes. AI-driven behavioral clustering analyzes how customers actually act—what they click, buy, and engage with—to group them into actionable "personas." This reveals who your customers really are, enabling true personalization.</p>
+                                <button id="reveal-persona-btn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow transition-transform transform hover:scale-105">
+                                    Click to Reveal AI Personas
+                                </button>
+                                <div id="persona-result-loader" class="mt-4 hidden"><div class="spinner"></div></div>
+                                <div id="persona-result" class="gemini-result-box hidden"></div>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
+                                <div id="demographic-card" class="bg-gray-100 p-6 rounded-lg border-2 border-dashed border-gray-300 text-center">
+                                    <h4 class="font-bold text-lg mb-2">Traditional View</h4>
+                                    <p class="text-gray-600">Males, Age 24-54</p>
+                                    <p class="text-sm text-gray-500">(Based on in-store assumptions)</p>
+                                </div>
+                                <div id="persona-card-container" class="space-y-4 hidden">
+                                     <div class="bg-blue-50 p-3 rounded-lg border border-blue-200">
+                                        <h5 class="font-bold text-blue-800">High-Value Persona</h5>
+                                        <p class="text-sm text-blue-700 mb-2">"Female Grocery Buyer", Age 24-50. Shops for family, values convenience and recipes.</p>
+                                        <button data-persona="Female Grocery Buyer" class="generate-ad-btn bg-green-500 hover:bg-green-600 text-white text-xs font-bold py-1 px-2 rounded-md shadow">✨ Generate Ad</button>
+                                    </div>
+                                     <div class="bg-yellow-50 p-3 rounded-lg border border-yellow-200">
+                                        <h5 class="font-bold text-yellow-800">Low-Value Persona</h5>
+                                        <p class="text-sm text-yellow-700 mb-2">"Male BBQ Browser". Browses on weekends, rarely purchases online.</p>
+                                        <button data-persona="Male BBQ Browser" class="generate-ad-btn bg-green-500 hover:bg-green-600 text-white text-xs font-bold py-1 px-2 rounded-md shadow">✨ Generate Ad</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-12 bg-gray-50 p-6 rounded-lg">
+                            <h4 class="font-bold text-lg text-gray-700 mb-2">Real-World Example: The Super Butcher Revolution</h4>
+                            <p class="text-gray-600 mb-2">Australian retailer Super Butcher thought their customer was the "male BBQ enthusiast." AI analysis of their website data revealed their most valuable online persona was actually the "female grocery buyer."</p>
+                            <p class="text-gray-800 font-bold">By redesigning their digital strategy around this new persona, they achieved a <span class="text-green-600 text-xl">29% increase</span> in email click-through rates.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: The AI Playbook & Strategy Sandbox -->
+        <section id="playbook" class="mt-20">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800">Your AI Playbook & Strategy Sandbox</h2>
+                <p class="mt-4 text-lg text-gray-600 max-w-4xl mx-auto">Harnessing these patterns starts with asking the right questions. Use the framework below, then generate a custom strategy for your own business needs in our AI Sandbox.</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+                 <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">AI Pattern</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Key Business Question It Answers</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Primary Applications</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Anomaly Detection</td>
+                                <td class="px-6 py-4 whitespace-normal text-sm text-gray-500">"What critical, unforeseen event is about to disrupt my operations?"</td>
+                                <td class="px-6 py-4 whitespace-normal text-sm text-gray-500">Manufacturing, Finance (Fraud), Supply Chain, IT</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Sequential Pattern Mining</td>
+                                <td class="px-6 py-4 whitespace-normal text-sm text-gray-500">"What sequence of behaviors leads to conversion or churn?"</td>
+                                <td class="px-6 py-4 whitespace-normal text-sm text-gray-500">E-commerce, Subscription Services, Marketing</td>
+                            </tr>
+                             <tr>
+                                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Behavioral Clustering</td>
+                                <td class="px-6 py-4 whitespace-normal text-sm text-gray-500">"Who are my real customer segments based on how they act, not who they are?"</td>
+                                <td class="px-6 py-4 whitespace-normal text-sm text-gray-500">Retail, Media (Personalization), Product Development</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- AI Strategy Sandbox -->
+                <div class="mt-12 pt-8 border-t border-gray-200">
+                    <div class="text-center">
+                         <h3 class="text-2xl font-bold text-gray-800">✨ AI Strategy Sandbox</h3>
+                         <p class="mt-2 text-md text-gray-600 max-w-2xl mx-auto">Select your industry and primary goal, and let our AI generate a high-level strategy to get you started.</p>
+                    </div>
+                    <div class="mt-8 max-w-2xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="industry-select" class="block text-sm font-medium text-gray-700">Your Industry</label>
+                            <select id="industry-select" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                                <option>Retail</option>
+                                <option>Finance</option>
+                                <option>Healthcare</option>
+                                <option>Manufacturing</option>
+                                <option>Technology</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="goal-select" class="block text-sm font-medium text-gray-700">Your Goal</label>
+                            <select id="goal-select" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                                <option>Reduce Customer Churn</option>
+                                <option>Increase Sales Efficiency</option>
+                                <option>Improve Operational Uptime</option>
+                                <option>Personalize Marketing</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="text-center mt-6">
+                        <button id="generate-playbook-btn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">Generate Custom AI Strategy</button>
+                    </div>
+                     <div id="playbook-result-loader" class="mt-6 flex justify-center hidden"><div class="spinner"></div></div>
+                     <div id="playbook-result" class="gemini-result-box hidden"></div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white mt-16">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-gray-500">
+            <p>&copy; 2025 AI Insights. This is an interactive educational resource.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const navButtons = document.querySelectorAll('.nav-button');
+            const contentPanels = document.querySelectorAll('.content-panel');
+            let anomalyChart;
+
+            // --- Gemini API Call Helper ---
+            async function callGemini(prompt, resultElement, loadingElement) {
+                loadingElement.classList.remove('hidden');
+                resultElement.classList.add('hidden');
+                
+                let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
+                const payload = { contents: chatHistory };
+                const apiKey = "" 
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`API Error: ${response.statusText}`);
+                    }
+                    
+                    const result = await response.json();
+                    
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const text = result.candidates[0].content.parts[0].text;
+                        resultElement.textContent = text;
+                    } else {
+                        resultElement.textContent = "Sorry, I couldn't generate a response. Please try again.";
+                    }
+                } catch (error) {
+                    console.error("Gemini API call failed:", error);
+                    resultElement.textContent = "An error occurred while contacting the AI. Please check the console for details.";
+                } finally {
+                    loadingElement.classList.add('hidden');
+                    resultElement.classList.remove('hidden');
+                }
+            }
+
+
+            // --- Navigation Logic ---
+            navButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetPanelId = 'panel-' + button.id.split('-')[1];
+                    navButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    contentPanels.forEach(panel => {
+                        panel.classList.toggle('active', panel.id === targetPanelId);
+                    });
+                });
+            });
+
+            // --- Anomaly Hunter Logic ---
+            const createAnomalyChart = () => {
+                const ctx = document.getElementById('anomalyChart').getContext('2d');
+                const initialData = Array(20).fill(null).map(() => 50 + Math.random() * 10);
+                
+                if(anomalyChart) anomalyChart.destroy();
+
+                anomalyChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: Array(20).fill(null).map((_, i) => `T-${19 - i}`),
+                        datasets: [{
+                            label: 'Machine Temperature (°C)',
+                            data: initialData,
+                            borderColor: 'rgb(59, 130, 246)',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            fill: true, tension: 0.4, pointRadius: 3,
+                            pointBackgroundColor: 'rgb(59, 130, 246)'
+                        }]
+                    },
+                    options: {
+                        responsive: true, maintainAspectRatio: false,
+                        scales: { y: { beginAtZero: false, suggestedMin: 40, suggestedMax: 100 } },
+                        plugins: { legend: { display: false }, tooltip: { enabled: true } }
+                    }
+                });
+            };
+
+            document.getElementById('trigger-anomaly-btn').addEventListener('click', () => {
+                if (!anomalyChart) return;
+                const newData = Array(17).fill(null).map(() => 50 + Math.random() * 10);
+                newData.push(85 + Math.random() * 5, 90 + Math.random() * 5, 70 + Math.random() * 5);
+                const newPointColors = Array(17).fill('rgb(59, 130, 246)');
+                newPointColors.push('rgb(239, 68, 68)', 'rgb(239, 68, 68)', 'rgb(249, 115, 22)');
+
+                anomalyChart.data.datasets[0].data = newData;
+                anomalyChart.data.datasets[0].pointBackgroundColor = newPointColors;
+                anomalyChart.data.datasets[0].pointRadius = newData.map((_, i) => i > 16 ? 6 : 3);
+                anomalyChart.update();
+                document.getElementById('anomaly-gemini-controls').classList.remove('hidden');
+            });
+            
+            document.getElementById('explain-anomaly-btn').addEventListener('click', () => {
+                const prompt = `Based on the following scenario, suggest 3 potential root causes a factory manager should investigate. Scenario: An AI detected a sudden spike in machine temperature from a stable 55°C to over 90°C on a critical production line. Format the output as a simple numbered list with brief, actionable items.`;
+                callGemini(prompt, document.getElementById('anomaly-result'), document.getElementById('anomaly-result-loader'));
+            });
+
+            // --- Path Analyzer Logic ---
+            document.getElementById('show-path-btn').addEventListener('click', () => {
+                document.querySelectorAll('.path-step').forEach((step, index) => {
+                    step.classList.remove('highlight');
+                    setTimeout(() => step.classList.add('highlight'), index * 400);
+                });
+                document.getElementById('path-gemini-controls').classList.remove('hidden');
+            });
+
+            document.getElementById('suggest-strategy-btn').addEventListener('click', () => {
+                const prompt = `A customer on our music streaming service is showing the following path to churn: 1. App opens decrease. 2. Session times get shorter. 3. Song skip rate increases. 4. User stops creating playlists. Based on this pattern, suggest 3 creative, hyper-personalized retention strategies. Format the output as a numbered list with a bolded title for each strategy.`;
+                callGemini(prompt, document.getElementById('path-result'), document.getElementById('path-result-loader'));
+            });
+
+            // --- Persona Architect Logic ---
+            document.getElementById('reveal-persona-btn').addEventListener('click', () => {
+                const demoCard = document.getElementById('demographic-card');
+                const personaContainer = document.getElementById('persona-card-container');
+                demoCard.classList.toggle('hidden');
+                personaContainer.classList.toggle('hidden');
+                document.getElementById('reveal-persona-btn').textContent = personaContainer.classList.contains('hidden') ? "Click to Reveal AI Personas" : "Show Traditional View";
+            });
+
+            document.querySelectorAll('.generate-ad-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const persona = button.dataset.persona;
+                    let prompt;
+                    if(persona === "Female Grocery Buyer") {
+                        prompt = `Generate a short, compelling Facebook ad copy (one headline and one body text) targeting a 'Female Grocery Buyer' persona for an online butcher shop. This persona is 24-50, shops for her family, and values convenience and recipes. The tone should be helpful and inspiring. Format as "Headline: [headline]\nBody: [body]".`;
+                    } else {
+                        prompt = `Generate a short, compelling Instagram ad copy (one headline and one body text) targeting a 'Male BBQ Browser' persona for an online butcher shop. This persona browses on weekends for high-end cuts but rarely purchases online. The goal is to drive his first online purchase. The tone should be exciting and emphasize quality. Format as "Headline: [headline]\nBody: [body]".`;
+                    }
+                    callGemini(prompt, document.getElementById('persona-result'), document.getElementById('persona-result-loader'));
+                });
+            });
+            
+            // --- Playbook Sandbox Logic ---
+            document.getElementById('generate-playbook-btn').addEventListener('click', () => {
+                const industry = document.getElementById('industry-select').value;
+                const goal = document.getElementById('goal-select').value;
+                const prompt = `I am a business leader in the '${industry}' industry. My primary business goal is to '${goal}'. Briefly outline a 3-step high-level strategy that leverages AI data patterns (like anomaly detection, path analysis, or clustering) to achieve this goal. Format the output as a numbered list with bold headings for each step.`;
+                callGemini(prompt, document.getElementById('playbook-result'), document.getElementById('playbook-result-loader'));
+            });
+
+            // --- Initial Load ---
+            const init = () => {
+                createAnomalyChart();
+                document.getElementById('nav-anomaly').click();
+            };
+
+            init();
+        });
+    </script>
+</body>
+</html>
