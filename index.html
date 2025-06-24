@@ -1,528 +1,512 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2575.6">
-  <style type="text/css">
-    body {background-color: #f7f9fa}
-    span.s1 {font-kerning: none}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI for Business: Uncovering Hidden Patterns</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals with Blue Accent -->
+    <!-- Application Structure Plan: A guided, story-driven single-page application. The user flows from a high-level introduction to a comparison of Traditional vs. AI analytics. The core of the app is a tabbed interface exploring the key patterns (Anomaly Hunter, Path Analyzer, Persona Architect, Affinity Analyst), each with an explanation, an interactive visualization, and a real-world case study. The experience concludes with an actionable playbook. This structure was chosen to make a complex topic digestible and engaging for a non-technical business audience, guiding them through the concepts logically from 'why' to 'what' and 'how'. -->
+    <!-- Visualization & Content Choices: 
+        - Traditional vs. AI: Interactive tabs to compare concepts directly (HTML/JS). Justification: Clear, direct comparison.
+        - Anomaly Detection: Interactive line chart (Chart.js/Canvas) where users can trigger an anomaly. Justification: Visually demonstrates the concept of deviation from a baseline.
+        - Sequential Pattern Mining: A JS-animated process flow diagram. Justification: Emphasizes the *sequence* of events.
+        - Behavioral Clustering: Interactive cards that "flip" to reveal AI-driven personas. Justification: Creates a "reveal" moment.
+        - Affinity Analysis: An interactive calculator for Support, Confidence, and Lift. Justification: Makes abstract statistical concepts tangible and understandable.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F9FAFB;
+            color: #1F2937;
+        }
+        .nav-button {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .nav-button.active {
+            background-color: #3B82F6;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .nav-button:not(.active):hover {
+            background-color: #E5E7EB;
+        }
+        .content-panel {
+            display: none;
+        }
+        .content-panel.active {
+            display: block;
+        }
+        .path-step {
+            transition: all 0.5s ease-in-out;
+            opacity: 0.5;
+            transform: translateY(10px);
+        }
+        .path-step.highlight {
+            opacity: 1;
+            transform: translateY(0);
+            background-color: #DBEAFE;
+            border-color: #3B82F6;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 40vh;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+    </style>
 </head>
-<body>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1">&lt;!DOCTYPE html&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1">&lt;html lang="en"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1">&lt;head&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">    </span>&lt;title&gt;AI for Business: Uncovering Hidden Patterns&lt;/title&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdn.jsdelivr.net/npm/chart.js"&gt;&lt;/script&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">    </span>&lt;link rel="preconnect" href="https://fonts.googleapis.com"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">    </span>&lt;link rel="preconnect" href="https://fonts.gstatic.com" crossorigin&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">    </span>&lt;link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">    </span>&lt;!-- Chosen Palette: Warm Neutrals with Blue Accent --&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">    </span>&lt;!-- Application Structure Plan: A guided, story-driven single-page application. The user flows from a high-level introduction to a comparison of Traditional vs. AI analytics. The core of the app is a tabbed interface exploring the key patterns (Anomaly Hunter, Path Analyzer, Persona Architect, Affinity Analyst), each with an explanation, an interactive visualization, and a real-world case study. The experience concludes with an actionable playbook. This structure was chosen to make a complex topic digestible and engaging for a non-technical business audience, guiding them through the concepts logically from 'why' to 'what' and 'how'. --&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">    </span>&lt;!-- Visualization &amp; Content Choices:<span class="Apple-converted-space"> </span></span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>- Traditional vs. AI: Interactive tabs to compare concepts directly (HTML/JS). Justification: Clear, direct comparison.</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>- Anomaly Detection: Interactive line chart (Chart.js/Canvas) where users can trigger an anomaly. Justification: Visually demonstrates the concept of deviation from a baseline.</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>- Sequential Pattern Mining: A JS-animated process flow diagram. Justification: Emphasizes the *sequence* of events.</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>- Behavioral Clustering: Interactive cards that "flip" to reveal AI-driven personas. Justification: Creates a "reveal" moment.</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>- Affinity Analysis: An interactive calculator for Support, Confidence, and Lift. Justification: Makes abstract statistical concepts tangible and understandable.</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">    </span>--&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">    </span>&lt;!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. --&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">    </span>&lt;style&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>body {</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>font-family: 'Inter', sans-serif;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>background-color: #F9FAFB;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>color: #1F2937;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>}</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>.nav-button {</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>transition: all 0.3s ease;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>cursor: pointer;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>}</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>.nav-button.active {</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>background-color: #3B82F6;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>color: white;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>}</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>.nav-button:not(.active):hover {</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>background-color: #E5E7EB;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>}</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>.content-panel {</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>display: none;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>}</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>.content-panel.active {</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>display: block;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>}</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>.path-step {</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>transition: all 0.5s ease-in-out;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>opacity: 0.5;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>transform: translateY(10px);</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>}</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>.path-step.highlight {</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>opacity: 1;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>transform: translateY(0);</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>background-color: #DBEAFE;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>border-color: #3B82F6;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>}</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>.chart-container {</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>position: relative;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>width: 100%;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>max-width: 700px;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>margin-left: auto;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>margin-right: auto;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>height: 300px;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>max-height: 40vh;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>}</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>@media (min-width: 768px) {</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>.chart-container {</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>height: 350px;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>}</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>}</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1">&lt;/head&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1">&lt;body class="antialiased"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a; min-height: 28.0px"><span class="s1"></span><br></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">    </span>&lt;!-- Header Section --&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">    </span>&lt;header class="bg-white shadow-sm"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 text-center"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>&lt;h1 class="text-4xl md:text-5xl font-bold text-gray-800 tracking-tight"&gt;Beyond the Trendline&lt;/h1&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>&lt;p class="mt-4 text-lg md:text-xl text-gray-600 max-w-3xl mx-auto"&gt;Discover the hidden patterns in your data that AI can unlock to drive real business growth.&lt;/p&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/header&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a; min-height: 28.0px"><span class="s1"></span><br></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">    </span>&lt;main class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a; min-height: 28.0px"><span class="s1"></span><br></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>&lt;!-- Section 1: The New Intelligence --&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>&lt;section id="introduction" class="mb-20"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="text-center mb-12"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>&lt;h2 class="text-3xl font-bold text-gray-800"&gt;The New Intelligence: From Looking Back to Seeing Ahead&lt;/h2&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>&lt;p class="mt-4 text-lg text-gray-600 max-w-4xl mx-auto"&gt;Traditional analytics tells you what happened. AI-powered analytics shows you what will happen and what to do about it. This section demonstrates the fundamental shift from reactive reporting to proactive strategy, setting the stage for the powerful patterns we'll explore.&lt;/p&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="bg-white p-6 md:p-8 rounded-xl shadow-lg"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="border-r-0 md:border-r border-gray-200 pr-0 md:pr-8"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;h3 class="text-2xl font-bold mb-4 text-blue-600"&gt;Traditional Analytics&lt;/h3&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;p class="text-gray-600 mb-4"&gt;Relies on structured data and human-led queries to describe and diagnose past events. It's essential for review but limited in scope and scale.&lt;/p&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;ul class="space-y-3"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;li class="flex items-start"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;span class="text-blue-500 mr-3 mt-1"&gt;&amp;#10003;&lt;/span&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;div&gt;&lt;strong class="text-gray-700"&gt;Function:&lt;/strong&gt; Descriptive (What happened?)&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;/li&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;li class="flex items-start"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;span class="text-blue-500 mr-3 mt-1"&gt;&amp;#10003;&lt;/span&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;div&gt;&lt;strong class="text-gray-700"&gt;Data Type:&lt;/strong&gt; Primarily structured (databases, spreadsheets).&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;/li&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                             </span>&lt;li class="flex items-start"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;span class="text-blue-500 mr-3 mt-1"&gt;&amp;#10003;&lt;/span&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;div&gt;&lt;strong class="text-gray-700"&gt;Insight:&lt;/strong&gt; Identifies known trends and correlations.&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;/li&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/ul&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="bg-blue-50 rounded-lg p-6"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;h3 class="text-2xl font-bold mb-4 text-green-600"&gt;AI-Powered Pattern Recognition&lt;/h3&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;p class="text-gray-600 mb-4"&gt;Leverages machine learning to analyze vast, complex datasets—including "dark data" like text and images—to predict future outcomes and recommend optimal actions.&lt;/p&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;ul class="space-y-3"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;li class="flex items-start"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;span class="text-green-500 mr-3 mt-1"&gt;&amp;#10003;&lt;/span&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;div&gt;&lt;strong class="text-gray-700"&gt;Function:&lt;/strong&gt; Predictive &amp; Prescriptive (What will happen? What should we do?).&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;/li&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;li class="flex items-start"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;span class="text-green-500 mr-3 mt-1"&gt;&amp;#10003;&lt;/span&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;div&gt;&lt;strong class="text-gray-700"&gt;Data Type:&lt;/strong&gt; Structured &amp; Unstructured (text, images, sensors).&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;/li&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;li class="flex items-start"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;span class="text-green-500 mr-3 mt-1"&gt;&amp;#10003;&lt;/span&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;div&gt;&lt;strong class="text-gray-700"&gt;Insight:&lt;/strong&gt; Uncovers unknown, complex, and non-linear relationships.&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;/li&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/ul&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/section&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a; min-height: 28.0px"><span class="s1"></span><br></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>&lt;!-- Section 2: The Four AI Patterns --&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>&lt;section id="patterns"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="text-center mb-12"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>&lt;h2 class="text-3xl font-bold text-gray-800"&gt;Four Powerful AI Patterns in Action&lt;/h2&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>&lt;p class="mt-4 text-lg text-gray-600 max-w-4xl mx-auto"&gt;Move beyond theory and see how AI identifies specific, non-obvious patterns to solve critical business problems. Each tab below reveals a different capability, complete with an interactive demonstration and a real-world success story.&lt;/p&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a; min-height: 28.0px"><span class="s1"><span class="Apple-converted-space">            </span></span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="bg-white rounded-xl shadow-lg overflow-hidden"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>&lt;!-- Navigation Tabs --&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>&lt;nav class="flex flex-wrap border-b border-gray-200"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;button id="nav-anomaly" class="nav-button flex-grow py-4 px-2 text-sm md:text-base font-medium text-gray-700 active"&gt;1. The Anomaly Hunter&lt;/button&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;button id="nav-path" class="nav-button flex-grow py-4 px-2 text-sm md:text-base font-medium text-gray-700"&gt;2. The Path Analyzer&lt;/button&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;button id="nav-persona" class="nav-button flex-grow py-4 px-2 text-sm md:text-base font-medium text-gray-700"&gt;3. The Persona Architect&lt;/button&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;button id="nav-affinity" class="nav-button flex-grow py-4 px-2 text-sm md:text-base font-medium text-gray-700"&gt;4. The Affinity Analyst&lt;/button&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/nav&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a; min-height: 28.0px"><span class="s1"></span><br></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="p-6 md:p-8"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;!-- Anomaly Hunter Panel --&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div id="panel-anomaly" class="content-panel active"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;h3 class="text-2xl font-bold text-gray-800 mb-3"&gt;Detect Critical Deviations Before They Become Disasters&lt;/h3&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;p class="text-gray-600 mb-6"&gt;AI-powered anomaly detection learns the complex signature of "normal" operations from thousands of variables. It then flags any subtle deviation that signals a future problem—from machinery failure to financial fraud—long before traditional, rule-based alerts would.&lt;/p&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;button id="trigger-anomaly-btn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow transition-transform transform hover:scale-105"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                    </span>Click to Trigger an Anomaly</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;/button&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;div class="chart-container"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;canvas id="anomalyChart"&gt;&lt;/canvas&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;div class="mt-12 bg-gray-50 p-6 rounded-lg"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;h4 class="font-bold text-lg text-gray-700 mb-2"&gt;Real-World Example: SUN Automation's Predictive Maintenance&lt;/h4&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;p class="text-gray-600"&gt;SUN Automation used AI to monitor machinery data (vibration, temperature) and predict failures before they happened. This captured the "tribal knowledge" of retiring experts, digitizing their intuition to create a new service model based on selling operational uptime, a massive competitive advantage.&lt;/p&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a; min-height: 28.0px"><span class="s1"></span><br></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;!-- Path Analyzer Panel --&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div id="panel-path" class="content-panel"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                       </span>&lt;div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;h3 class="text-2xl font-bold text-gray-800 mb-3"&gt;Decode the "Why" Behind Customer Actions&lt;/h3&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;p class="text-gray-600 mb-6"&gt;Sequential pattern mining uncovers the ordered "recipes" of behavior that lead to critical outcomes like conversion or churn. Instead of isolated actions, it reveals the time-based narrative of the customer journey, showing you exactly which paths to optimize and which to fix.&lt;/p&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;button id="show-path-btn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow transition-transform transform hover:scale-105"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                    </span>Click to Reveal Path to Churn</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;/button&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;div id="path-visualizer" class="space-y-2"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;div class="path-step p-3 border-l-4 border-gray-300 bg-gray-100 rounded-r-lg"&gt;&lt;strong&gt;Step 1:&lt;/strong&gt; App opens decrease slightly.&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;div class="path-step p-3 border-l-4 border-gray-300 bg-gray-100 rounded-r-lg"&gt;&lt;strong&gt;Step 2:&lt;/strong&gt; Session times become shorter.&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;div class="path-step p-3 border-l-4 border-gray-300 bg-gray-100 rounded-r-lg"&gt;&lt;strong&gt;Step 3:&lt;/strong&gt; Song skip rate increases.&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;div class="path-step p-3 border-l-4 border-gray-300 bg-gray-100 rounded-r-lg"&gt;&lt;strong&gt;Step 4:&lt;/strong&gt; User stops creating playlists.&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;div class="path-step p-3 border-l-4 border-red-300 bg-red-50 rounded-r-lg font-bold text-red-700"&gt;&lt;strong&gt;Outcome:&lt;/strong&gt; High Churn Risk&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;div class="mt-12 bg-gray-50 p-6 rounded-lg"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;h4 class="font-bold text-lg text-gray-700 mb-2"&gt;Real-World Example: Spotify's Proactive Retention&lt;/h4&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;p class="text-gray-600"&gt;Spotify analyzes sequences of user behavior (not just listening time) to predict churn. By identifying patterns of disengagement like increased song skipping or decreased playlist creation, they can trigger hyper-personalized re-engagement campaigns *before* a user cancels, a key to their industry-leading retention.&lt;/p&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a; min-height: 28.0px"><span class="s1"></span><br></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;!-- Persona Architect Panel --&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div id="panel-persona" class="content-panel"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;div class="grid grid-cols-1 lg:grid-cols-2 gap-8"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                             </span>&lt;div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;h3 class="text-2xl font-bold text-gray-800 mb-3"&gt;Discover Your True Customer Tribes&lt;/h3&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;p class="text-gray-600 mb-6"&gt;Move beyond flawed demographic stereotypes. AI-driven behavioral clustering analyzes how customers actually act—what they click, buy, and engage with—to group them into actionable "personas." This reveals who your customers really are, enabling true personalization.&lt;/p&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;button id="reveal-persona-btn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow transition-transform transform hover:scale-105"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                    </span>Click to Reveal AI Personas</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;/button&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;div id="demographic-card" class="bg-gray-100 p-6 rounded-lg border-2 border-dashed border-gray-300 text-center"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;h4 class="font-bold text-lg mb-2"&gt;Traditional View&lt;/h4&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;p class="text-gray-600"&gt;Males, Age 24-54&lt;/p&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;p class="text-sm text-gray-500"&gt;(Based on in-store assumptions)&lt;/p&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;div id="persona-card-container" class="space-y-4 hidden"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                     </span>&lt;div class="bg-blue-50 p-3 rounded-lg border border-blue-200"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                        </span>&lt;h5 class="font-bold text-blue-800"&gt;High-Value Persona&lt;/h5&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                        </span>&lt;p class="text-sm text-blue-700 mb-2"&gt;"Female Grocery Buyer", Age 24-50. Shops for family, values convenience and recipes.&lt;/p&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                     </span>&lt;div class="bg-yellow-50 p-3 rounded-lg border border-yellow-200"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                        </span>&lt;h5 class="font-bold text-yellow-800"&gt;Low-Value Persona&lt;/h5&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                        </span>&lt;p class="text-sm text-yellow-700 mb-2"&gt;"Male BBQ Browser". Browses on weekends, rarely purchases online.&lt;/p&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;div class="mt-12 bg-gray-50 p-6 rounded-lg"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;h4 class="font-bold text-lg text-gray-700 mb-2"&gt;Real-World Example: The Super Butcher Revolution&lt;/h4&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;p class="text-gray-600 mb-2"&gt;Australian retailer Super Butcher thought their customer was the "male BBQ enthusiast." AI analysis of their website data revealed their most valuable online persona was actually the "female grocery buyer."&lt;/p&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;p class="text-gray-800 font-bold"&gt;By redesigning their digital strategy around this new persona, they achieved a &lt;span class="text-green-600 text-xl"&gt;29% increase&lt;/span&gt; in email click-through rates.&lt;/p&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a; min-height: 28.0px"><span class="s1"></span><br></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;!-- Affinity Analyst Panel --&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div id="panel-affinity" class="content-panel"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;h3 class="text-2xl font-bold text-gray-800 mb-3"&gt;Uncover Hidden Relationships to Drive Growth&lt;/h3&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;p class="text-gray-600 mb-6"&gt;Affinity Analysis, often called Market Basket Analysis, systematically uncovers hidden relationships between items to reveal which products are frequently purchased together. This generates "if-then" rules that, when acted upon, can have a profound impact on sales, marketing, and customer satisfaction.&lt;/p&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a; min-height: 28.0px"><span class="s1"><span class="Apple-converted-space">                        </span></span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;div class="bg-gray-50 p-6 rounded-lg"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;h4 class="font-bold text-lg text-gray-700 mb-4 text-center"&gt;Interactive Metrics Explorer&lt;/h4&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;p class="text-center text-gray-600 mb-6"&gt;Let's say a grocery store had &lt;strong id="total-baskets-label"&gt;1000&lt;/strong&gt; total transactions. Play with the numbers below to see how the core metrics of affinity analysis work.&lt;/p&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a; min-height: 28.0px"><span class="s1"><span class="Apple-converted-space">                            </span></span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;label for="baskets-with-milk" class="block text-sm font-medium text-gray-700"&gt;Baskets w/ Milk&lt;/label&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;input type="range" id="baskets-with-milk" min="1" max="1000" value="100" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;span class="text-sm text-blue-600 font-semibold" id="baskets-with-milk-value"&gt;100&lt;/span&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;label for="baskets-with-bread" class="block text-sm font-medium text-gray-700"&gt;Baskets w/ Bread&lt;/label&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;input type="range" id="baskets-with-bread" min="1" max="1000" value="120" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                     </span>&lt;span class="text-sm text-blue-600 font-semibold" id="baskets-with-bread-value"&gt;120&lt;/span&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                 </span>&lt;div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;label for="baskets-with-both" class="block text-sm font-medium text-gray-700"&gt;Baskets w/ Both&lt;/label&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;input type="range" id="baskets-with-both" min="1" max="100" value="80" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                     </span>&lt;span class="text-sm text-blue-600 font-semibold" id="baskets-with-both-value"&gt;80&lt;/span&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a; min-height: 28.0px"><span class="s1"></span><br></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;div class="bg-white p-4 rounded-lg shadow-sm"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;h5 class="font-bold text-gray-600"&gt;Support&lt;/h5&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;p class="text-2xl font-bold text-blue-600" id="support-metric"&gt;8.0%&lt;/p&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;p class="text-xs text-gray-500"&gt;Popularity of the pair&lt;/p&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;div class="bg-white p-4 rounded-lg shadow-sm"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;h5 class="font-bold text-gray-600"&gt;Confidence&lt;/h5&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;p class="text-2xl font-bold text-blue-600" id="confidence-metric"&gt;80.0%&lt;/p&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;p class="text-xs text-gray-500"&gt;Reliability of the rule&lt;/p&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;div class="bg-white p-4 rounded-lg shadow-sm"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;h5 class="font-bold text-gray-600"&gt;Lift&lt;/h5&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;p class="text-2xl font-bold text-green-600" id="lift-metric"&gt;6.67&lt;/p&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;p class="text-xs text-gray-500"&gt;Strength of the relationship&lt;/p&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a; min-height: 28.0px"><span class="s1"><span class="Apple-converted-space">                        </span></span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;div class="mt-12"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;h4 class="font-bold text-lg text-gray-700 mb-4"&gt;Case Studies in Action&lt;/h4&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;div class="overflow-x-auto bg-gray-50 p-4 rounded-lg"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                               </span>&lt;table class="min-w-full divide-y divide-gray-200"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;thead class="bg-gray-100"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                        </span>&lt;tr&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                            </span>&lt;th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"&gt;Company&lt;/th&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                            </span>&lt;th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"&gt;Insight (If-Then Rule)&lt;/th&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                            </span>&lt;th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"&gt;Action Taken&lt;/th&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                            </span>&lt;th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"&gt;Result&lt;/th&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                        </span>&lt;/tr&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;/thead&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;tbody class="bg-white divide-y divide-gray-200"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                        </span>&lt;tr&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                            </span>&lt;td class="px-4 py-4 whitespace-normal font-medium text-gray-900"&gt;Amazon&lt;/td&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                            </span>&lt;td class="px-4 py-4 whitespace-normal text-sm text-gray-500"&gt;If customers buy gardening books, they often also purchase soil or planters.&lt;/td&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                            </span>&lt;td class="px-4 py-4 whitespace-normal text-sm text-gray-500"&gt;Created the "Frequently Bought Together" recommendation engine.&lt;/td&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                            </span>&lt;td class="px-4 py-4 whitespace-normal text-sm text-gray-500 font-bold"&gt;Over 35% of sales driven by this feature.&lt;/td&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                        </span>&lt;/tr&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                        </span>&lt;tr&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                            </span>&lt;td class="px-4 py-4 whitespace-normal font-medium text-gray-900"&gt;Local Coffee Shop&lt;/td&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                            </span>&lt;td class="px-4 py-4 whitespace-normal text-sm text-gray-500"&gt;If customers buy iced coffees, they frequently also buy snack boxes.&lt;/td&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                            </span>&lt;td class="px-4 py-4 whitespace-normal text-sm text-gray-500"&gt;Created a "Cool &amp; Crispy" combo package at a slight discount.&lt;/td&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                            </span>&lt;td class="px-4 py-4 whitespace-normal text-sm text-gray-500 font-bold"&gt;22% increase in AOV within three months.&lt;/td&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                        </span>&lt;/tr&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                        </span>&lt;tr&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                            </span>&lt;td class="px-4 py-4 whitespace-normal font-medium text-gray-900"&gt;SPAR (Austria)&lt;/td&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                            </span>&lt;td class="px-4 py-4 whitespace-normal text-sm text-gray-500"&gt;Analyzed weather, marketing, and seasonality to predict demand.&lt;/td&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                            </span>&lt;td class="px-4 py-4 whitespace-normal text-sm text-gray-500"&gt;Optimized inventory quantities per shop based on AI predictions.&lt;/td&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                            </span>&lt;td class="px-4 py-4 whitespace-normal text-sm text-gray-500 font-bold"&gt;&gt;90% prediction accuracy; reduced food waste.&lt;/td&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                        </span>&lt;/tr&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;/tbody&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;/table&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a; min-height: 28.0px"><span class="s1"></span><br></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/section&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a; min-height: 28.0px"><span class="s1"></span><br></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>&lt;!-- Section 3: The AI Playbook --&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>&lt;section id="playbook" class="mt-20"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="text-center mb-12"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>&lt;h2 class="text-3xl font-bold text-gray-800"&gt;Your AI Pattern Recognition Playbook&lt;/h2&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>&lt;p class="mt-4 text-lg text-gray-600 max-w-4xl mx-auto"&gt;Harnessing these patterns starts with asking the right questions. Use this framework to identify the most valuable opportunities within your organization.&lt;/p&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="bg-white rounded-xl shadow-lg p-6 md:p-8"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                 </span>&lt;div class="overflow-x-auto"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;table class="min-w-full divide-y divide-gray-200"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;thead class="bg-gray-50"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;tr&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"&gt;AI Pattern&lt;/th&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"&gt;Key Business Question It Answers&lt;/th&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"&gt;Primary Applications&lt;/th&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;/tr&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/thead&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;tbody class="bg-white divide-y divide-gray-200"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;tr&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900"&gt;Anomaly Detection&lt;/td&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;td class="px-6 py-4 whitespace-normal text-sm text-gray-500"&gt;"What critical, unforeseen event is about to disrupt my operations?"&lt;/td&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;td class="px-6 py-4 whitespace-normal text-sm text-gray-500"&gt;Manufacturing, Finance (Fraud), Supply Chain, IT&lt;/td&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;/tr&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;tr&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900"&gt;Sequential Pattern Mining&lt;/td&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;td class="px-6 py-4 whitespace-normal text-sm text-gray-500"&gt;"What sequence of behaviors leads to conversion or churn?"&lt;/td&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;td class="px-6 py-4 whitespace-normal text-sm text-gray-500"&gt;E-commerce, Subscription Services, Marketing&lt;/td&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;/tr&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                             </span>&lt;tr&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900"&gt;Behavioral Clustering&lt;/td&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;td class="px-6 py-4 whitespace-normal text-sm text-gray-500"&gt;"Who are my real customer segments based on how they act, not who they are?"&lt;/td&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;td class="px-6 py-4 whitespace-normal text-sm text-gray-500"&gt;Retail, Media (Personalization), Product Development&lt;/td&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;/tr&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                             </span>&lt;tr&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900"&gt;Affinity Analysis&lt;/td&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;td class="px-6 py-4 whitespace-normal text-sm text-gray-500"&gt;"What products or services are my customers likely to purchase together?"&lt;/td&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;td class="px-6 py-4 whitespace-normal text-sm text-gray-500"&gt;Retail (Bundling), E-commerce (Recommendations), Marketing (Promotions)&lt;/td&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;/tr&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/tbody&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/table&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                 </span>&lt;div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-8"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="bg-gray-50 p-4 rounded-lg"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;h4 class="font-bold text-lg text-gray-800 mb-2"&gt;1. Lead with the Question&lt;/h4&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;p class="text-sm text-gray-600"&gt;Start with a critical business challenge, not the algorithm. Let the problem dictate the right AI pattern to apply.&lt;/p&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="bg-gray-50 p-4 rounded-lg"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;h4 class="font-bold text-lg text-gray-800 mb-2"&gt;2. Unify Your Data&lt;/h4&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;p class="text-sm text-gray-600"&gt;AI is only as smart as the data it learns from. Breaking down data silos is the essential foundation for any advanced analytics.&lt;/p&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="bg-gray-50 p-4 rounded-lg"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;h4 class="font-bold text-lg text-gray-800 mb-2"&gt;3. Champion Data Storytelling&lt;/h4&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;p class="text-sm text-gray-600"&gt;Translate complex findings into compelling business narratives. The goal is to drive action, not just present numbers.&lt;/p&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/section&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a; min-height: 28.0px"><span class="s1"></span><br></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/main&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a; min-height: 28.0px"><span class="s1"></span><br></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">    </span>&lt;footer class="bg-white mt-16"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-gray-500"&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>&lt;p&gt;&amp;copy; 2025 AI Insights. This is an interactive educational resource.&lt;/p&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/footer&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a; min-height: 28.0px"><span class="s1"></span><br></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">    </span>&lt;script&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>document.addEventListener('DOMContentLoaded', function() {</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>const navButtons = document.querySelectorAll('.nav-button');</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>const contentPanels = document.querySelectorAll('.content-panel');</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>let anomalyChart;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a; min-height: 28.0px"><span class="s1"></span><br></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>// --- Navigation Logic ---</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>navButtons.forEach(button =&gt; {</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>button.addEventListener('click', () =&gt; {</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>const targetPanelId = 'panel-' + button.id.split('-')[1];</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>navButtons.forEach(btn =&gt; btn.classList.remove('active'));</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>button.classList.add('active');</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>contentPanels.forEach(panel =&gt; {</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>panel.classList.toggle('active', panel.id === targetPanelId);</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>});</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>});</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>});</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a; min-height: 28.0px"><span class="s1"></span><br></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>// --- Anomaly Hunter Logic ---</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>const createAnomalyChart = () =&gt; {</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>const ctx = document.getElementById('anomalyChart').getContext('2d');</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>const initialData = Array(20).fill(null).map(() =&gt; 50 + Math.random() * 10);</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a; min-height: 28.0px"><span class="s1"><span class="Apple-converted-space">                </span></span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>if(anomalyChart) anomalyChart.destroy();</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a; min-height: 28.0px"><span class="s1"></span><br></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>anomalyChart = new Chart(ctx, {</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>type: 'line',</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>data: {</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>labels: Array(20).fill(null).map((_, i) =&gt; `T-${19 - i}`),</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>datasets: [{</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>label: 'Machine Temperature (°C)',</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>data: initialData,</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>borderColor: 'rgb(59, 130, 246)',</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>backgroundColor: 'rgba(59, 130, 246, 0.1)',</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>fill: true, tension: 0.4, pointRadius: 3,</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                            </span>pointBackgroundColor: 'rgb(59, 130, 246)'</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>}]</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>},</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>options: {</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>responsive: true, maintainAspectRatio: false,</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>scales: { y: { beginAtZero: false, suggestedMin: 40, suggestedMax: 100 } },</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                        </span>plugins: { legend: { display: false }, tooltip: { enabled: true } }</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>}</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>});</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>};</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a; min-height: 28.0px"><span class="s1"></span><br></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById('trigger-anomaly-btn').addEventListener('click', () =&gt; {</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>if (!anomalyChart) return;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>const newData = Array(17).fill(null).map(() =&gt; 50 + Math.random() * 10);</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>newData.push(85 + Math.random() * 5, 90 + Math.random() * 5, 70 + Math.random() * 5);</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>const newPointColors = Array(17).fill('rgb(59, 130, 246)');</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>newPointColors.push('rgb(239, 68, 68)', 'rgb(239, 68, 68)', 'rgb(249, 115, 22)');</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a; min-height: 28.0px"><span class="s1"></span><br></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>anomalyChart.data.datasets[0].data = newData;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>anomalyChart.data.datasets[0].pointBackgroundColor = newPointColors;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>anomalyChart.data.datasets[0].pointRadius = newData.map((_, i) =&gt; i &gt; 16 ? 6 : 3);</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>anomalyChart.update();</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>});</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a; min-height: 28.0px"><span class="s1"></span><br></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>// --- Path Analyzer Logic ---</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById('show-path-btn').addEventListener('click', () =&gt; {</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>document.querySelectorAll('.path-step').forEach((step, index) =&gt; {</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>step.classList.remove('highlight');</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>setTimeout(() =&gt; step.classList.add('highlight'), index * 400);</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>});</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>});</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a; min-height: 28.0px"><span class="s1"></span><br></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>// --- Persona Architect Logic ---</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById('reveal-persona-btn').addEventListener('click', () =&gt; {</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>const demoCard = document.getElementById('demographic-card');</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>const personaContainer = document.getElementById('persona-card-container');</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>demoCard.classList.toggle('hidden');</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>personaContainer.classList.toggle('hidden');</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>document.getElementById('reveal-persona-btn').textContent = personaContainer.classList.contains('hidden') ? "Click to Reveal AI Personas" : "Show Traditional View";</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>});</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a; min-height: 28.0px"><span class="s1"></span><br></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>// --- Affinity Analysis Logic ---</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>const totalBaskets = 1000;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>const milkSlider = document.getElementById('baskets-with-milk');</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>const breadSlider = document.getElementById('baskets-with-bread');</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>const bothSlider = document.getElementById('baskets-with-both');</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>const milkValue = document.getElementById('baskets-with-milk-value');</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>const breadValue = document.getElementById('baskets-with-bread-value');</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>const bothValue = document.getElementById('baskets-with-both-value');</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a; min-height: 28.0px"><span class="s1"><span class="Apple-converted-space">            </span></span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>const supportMetricEl = document.getElementById('support-metric');</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>const confidenceMetricEl = document.getElementById('confidence-metric');</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>const liftMetricEl = document.getElementById('lift-metric');</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a; min-height: 28.0px"><span class="s1"></span><br></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>function calculateAffinityMetrics() {</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>const numMilk = parseInt(milkSlider.value);</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>const numBread = parseInt(breadSlider.value);</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>const numBoth = parseInt(bothSlider.value);</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a; min-height: 28.0px"><span class="s1"></span><br></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>milkValue.textContent = numMilk;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>breadValue.textContent = numBread;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>bothValue.textContent = numBoth;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>bothSlider.max = Math.min(numMilk, numBread); // Ensure 'both' can't be more than either individual item</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a; min-height: 28.0px"><span class="s1"></span><br></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>const support = (numBoth / totalBaskets) * 100;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>const confidence = numMilk &gt; 0 ? (numBoth / numMilk) * 100 : 0;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>const lift = (numMilk &gt; 0 &amp;&amp; numBread &gt; 0) ? (support / 100) / ((numMilk / totalBaskets) * (numBread / totalBaskets)) : 0;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a; min-height: 28.0px"><span class="s1"><span class="Apple-converted-space">                </span></span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>supportMetricEl.textContent = `${support.toFixed(1)}%`;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>confidenceMetricEl.textContent = `${confidence.toFixed(1)}%`;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>liftMetricEl.textContent = lift.toFixed(2);</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a; min-height: 28.0px"><span class="s1"><span class="Apple-converted-space">                </span></span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>if (lift &gt; 1) {</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>liftMetricEl.classList.remove('text-red-600');</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>liftMetricEl.classList.add('text-green-600');</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>} else {</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>liftMetricEl.classList.remove('text-green-600');</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                    </span>liftMetricEl.classList.add('text-red-600');</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>}</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>}</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a; min-height: 28.0px"><span class="s1"></span><br></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>[milkSlider, breadSlider, bothSlider].forEach(slider =&gt; {</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>slider.addEventListener('input', calculateAffinityMetrics);</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>});</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a; min-height: 28.0px"><span class="s1"></span><br></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>// --- Initial Load ---</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>const init = () =&gt; {</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>createAnomalyChart();</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>calculateAffinityMetrics();</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">                </span>document.getElementById('nav-anomaly').click();</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>};</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a; min-height: 28.0px"><span class="s1"></span><br></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">            </span>init();</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">        </span>});</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1">&lt;/body&gt;</span></h1>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Helvetica Neue'; color: #181e2a; -webkit-text-stroke: #181e2a"><span class="s1">&lt;/html&gt;</span></h1>
+<body class="antialiased">
+
+    <!-- Header Section -->
+    <header class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 tracking-tight">Beyond the Trendline</h1>
+            <p class="mt-4 text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">Discover the hidden patterns in your data that AI can unlock to drive real business growth.</p>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+
+        <!-- Section 1: The New Intelligence -->
+        <section id="introduction" class="mb-20">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800">The New Intelligence: From Looking Back to Seeing Ahead</h2>
+                <p class="mt-4 text-lg text-gray-600 max-w-4xl mx-auto">Traditional analytics tells you what happened. AI-powered analytics shows you what will happen and what to do about it. This section demonstrates the fundamental shift from reactive reporting to proactive strategy, setting the stage for the powerful patterns we'll explore.</p>
+            </div>
+            <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div class="border-r-0 md:border-r border-gray-200 pr-0 md:pr-8">
+                        <h3 class="text-2xl font-bold mb-4 text-blue-600">Traditional Analytics</h3>
+                        <p class="text-gray-600 mb-4">Relies on structured data and human-led queries to describe and diagnose past events. It's essential for review but limited in scope and scale.</p>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <span class="text-blue-500 mr-3 mt-1">&#10003;</span>
+                                <div><strong class="text-gray-700">Function:</strong> Descriptive (What happened?)</div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-blue-500 mr-3 mt-1">&#10003;</span>
+                                <div><strong class="text-gray-700">Data Type:</strong> Primarily structured (databases, spreadsheets).</div>
+                            </li>
+                             <li class="flex items-start">
+                                <span class="text-blue-500 mr-3 mt-1">&#10003;</span>
+                                <div><strong class="text-gray-700">Insight:</strong> Identifies known trends and correlations.</div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="bg-blue-50 rounded-lg p-6">
+                        <h3 class="text-2xl font-bold mb-4 text-green-600">AI-Powered Pattern Recognition</h3>
+                        <p class="text-gray-600 mb-4">Leverages machine learning to analyze vast, complex datasets—including "dark data" like text and images—to predict future outcomes and recommend optimal actions.</p>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <span class="text-green-500 mr-3 mt-1">&#10003;</span>
+                                <div><strong class="text-gray-700">Function:</strong> Predictive & Prescriptive (What will happen? What should we do?).</div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-500 mr-3 mt-1">&#10003;</span>
+                                <div><strong class="text-gray-700">Data Type:</strong> Structured & Unstructured (text, images, sensors).</div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-500 mr-3 mt-1">&#10003;</span>
+                                <div><strong class="text-gray-700">Insight:</strong> Uncovers unknown, complex, and non-linear relationships.</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: The Four AI Patterns -->
+        <section id="patterns">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800">Four Powerful AI Patterns in Action</h2>
+                <p class="mt-4 text-lg text-gray-600 max-w-4xl mx-auto">Move beyond theory and see how AI identifies specific, non-obvious patterns to solve critical business problems. Each tab below reveals a different capability, complete with an interactive demonstration and a real-world success story.</p>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                <!-- Navigation Tabs -->
+                <nav class="flex flex-wrap border-b border-gray-200">
+                    <button id="nav-anomaly" class="nav-button flex-grow py-4 px-2 text-sm md:text-base font-medium text-gray-700 active">1. The Anomaly Hunter</button>
+                    <button id="nav-path" class="nav-button flex-grow py-4 px-2 text-sm md:text-base font-medium text-gray-700">2. The Path Analyzer</button>
+                    <button id="nav-persona" class="nav-button flex-grow py-4 px-2 text-sm md:text-base font-medium text-gray-700">3. The Persona Architect</button>
+                    <button id="nav-affinity" class="nav-button flex-grow py-4 px-2 text-sm md:text-base font-medium text-gray-700">4. The Affinity Analyst</button>
+                </nav>
+
+                <div class="p-6 md:p-8">
+                    <!-- Anomaly Hunter Panel -->
+                    <div id="panel-anomaly" class="content-panel active">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-800 mb-3">Detect Critical Deviations Before They Become Disasters</h3>
+                                <p class="text-gray-600 mb-6">AI-powered anomaly detection learns the complex signature of "normal" operations from thousands of variables. It then flags any subtle deviation that signals a future problem—from machinery failure to financial fraud—long before traditional, rule-based alerts would.</p>
+                                <button id="trigger-anomaly-btn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow transition-transform transform hover:scale-105">
+                                    Click to Trigger an Anomaly
+                                </button>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="anomalyChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="mt-12 bg-gray-50 p-6 rounded-lg">
+                            <h4 class="font-bold text-lg text-gray-700 mb-2">Real-World Example: SUN Automation's Predictive Maintenance</h4>
+                            <p class="text-gray-600">SUN Automation used AI to monitor machinery data (vibration, temperature) and predict failures before they happened. This captured the "tribal knowledge" of retiring experts, digitizing their intuition to create a new service model based on selling operational uptime, a massive competitive advantage.</p>
+                        </div>
+                    </div>
+
+                    <!-- Path Analyzer Panel -->
+                    <div id="panel-path" class="content-panel">
+                       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-800 mb-3">Decode the "Why" Behind Customer Actions</h3>
+                                <p class="text-gray-600 mb-6">Sequential pattern mining uncovers the ordered "recipes" of behavior that lead to critical outcomes like conversion or churn. Instead of isolated actions, it reveals the time-based narrative of the customer journey, showing you exactly which paths to optimize and which to fix.</p>
+                                <button id="show-path-btn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow transition-transform transform hover:scale-105">
+                                    Click to Reveal Path to Churn
+                                </button>
+                            </div>
+                            <div id="path-visualizer" class="space-y-2">
+                                <div class="path-step p-3 border-l-4 border-gray-300 bg-gray-100 rounded-r-lg"><strong>Step 1:</strong> App opens decrease slightly.</div>
+                                <div class="path-step p-3 border-l-4 border-gray-300 bg-gray-100 rounded-r-lg"><strong>Step 2:</strong> Session times become shorter.</div>
+                                <div class="path-step p-3 border-l-4 border-gray-300 bg-gray-100 rounded-r-lg"><strong>Step 3:</strong> Song skip rate increases.</div>
+                                <div class="path-step p-3 border-l-4 border-gray-300 bg-gray-100 rounded-r-lg"><strong>Step 4:</strong> User stops creating playlists.</div>
+                                <div class="path-step p-3 border-l-4 border-red-300 bg-red-50 rounded-r-lg font-bold text-red-700"><strong>Outcome:</strong> High Churn Risk</div>
+                            </div>
+                        </div>
+                        <div class="mt-12 bg-gray-50 p-6 rounded-lg">
+                            <h4 class="font-bold text-lg text-gray-700 mb-2">Real-World Example: Spotify's Proactive Retention</h4>
+                            <p class="text-gray-600">Spotify analyzes sequences of user behavior (not just listening time) to predict churn. By identifying patterns of disengagement like increased song skipping or decreased playlist creation, they can trigger hyper-personalized re-engagement campaigns *before* a user cancels, a key to their industry-leading retention.</p>
+                        </div>
+                    </div>
+
+                    <!-- Persona Architect Panel -->
+                    <div id="panel-persona" class="content-panel">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                             <div>
+                                <h3 class="text-2xl font-bold text-gray-800 mb-3">Discover Your True Customer Tribes</h3>
+                                <p class="text-gray-600 mb-6">Move beyond flawed demographic stereotypes. AI-driven behavioral clustering analyzes how customers actually act—what they click, buy, and engage with—to group them into actionable "personas." This reveals who your customers really are, enabling true personalization.</p>
+                                <button id="reveal-persona-btn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow transition-transform transform hover:scale-105">
+                                    Click to Reveal AI Personas
+                                </button>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
+                                <div id="demographic-card" class="bg-gray-100 p-6 rounded-lg border-2 border-dashed border-gray-300 text-center">
+                                    <h4 class="font-bold text-lg mb-2">Traditional View</h4>
+                                    <p class="text-gray-600">Males, Age 24-54</p>
+                                    <p class="text-sm text-gray-500">(Based on in-store assumptions)</p>
+                                </div>
+                                <div id="persona-card-container" class="space-y-4 hidden">
+                                     <div class="bg-blue-50 p-3 rounded-lg border border-blue-200">
+                                        <h5 class="font-bold text-blue-800">High-Value Persona</h5>
+                                        <p class="text-sm text-blue-700 mb-2">"Female Grocery Buyer", Age 24-50. Shops for family, values convenience and recipes.</p>
+                                    </div>
+                                     <div class="bg-yellow-50 p-3 rounded-lg border border-yellow-200">
+                                        <h5 class="font-bold text-yellow-800">Low-Value Persona</h5>
+                                        <p class="text-sm text-yellow-700 mb-2">"Male BBQ Browser". Browses on weekends, rarely purchases online.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-12 bg-gray-50 p-6 rounded-lg">
+                            <h4 class="font-bold text-lg text-gray-700 mb-2">Real-World Example: The Super Butcher Revolution</h4>
+                            <p class="text-gray-600 mb-2">Australian retailer Super Butcher thought their customer was the "male BBQ enthusiast." AI analysis of their website data revealed their most valuable online persona was actually the "female grocery buyer."</p>
+                            <p class="text-gray-800 font-bold">By redesigning their digital strategy around this new persona, they achieved a <span class="text-green-600 text-xl">29% increase</span> in email click-through rates.</p>
+                        </div>
+                    </div>
+
+                    <!-- Affinity Analyst Panel -->
+                    <div id="panel-affinity" class="content-panel">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-3">Uncover Hidden Relationships to Drive Growth</h3>
+                        <p class="text-gray-600 mb-6">Affinity Analysis, often called Market Basket Analysis, systematically uncovers hidden relationships between items to reveal which products are frequently purchased together. This generates "if-then" rules that, when acted upon, can have a profound impact on sales, marketing, and customer satisfaction.</p>
+                        
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <h4 class="font-bold text-lg text-gray-700 mb-4 text-center">Interactive Metrics Explorer</h4>
+                            <p class="text-center text-gray-600 mb-6">Let's say a grocery store had <strong id="total-baskets-label">1000</strong> total transactions. Play with the numbers below to see how the core metrics of affinity analysis work.</p>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                <div>
+                                    <label for="baskets-with-milk" class="block text-sm font-medium text-gray-700">Baskets w/ Milk</label>
+                                    <input type="range" id="baskets-with-milk" min="1" max="1000" value="100" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                                    <span class="text-sm text-blue-600 font-semibold" id="baskets-with-milk-value">100</span>
+                                </div>
+                                <div>
+                                    <label for="baskets-with-bread" class="block text-sm font-medium text-gray-700">Baskets w/ Bread</label>
+                                    <input type="range" id="baskets-with-bread" min="1" max="1000" value="120" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                                     <span class="text-sm text-blue-600 font-semibold" id="baskets-with-bread-value">120</span>
+                                </div>
+                                 <div>
+                                    <label for="baskets-with-both" class="block text-sm font-medium text-gray-700">Baskets w/ Both</label>
+                                    <input type="range" id="baskets-with-both" min="1" max="100" value="80" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                                     <span class="text-sm text-blue-600 font-semibold" id="baskets-with-both-value">80</span>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                    <h5 class="font-bold text-gray-600">Support</h5>
+                                    <p class="text-2xl font-bold text-blue-600" id="support-metric">8.0%</p>
+                                    <p class="text-xs text-gray-500">Popularity of the pair</p>
+                                </div>
+                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                    <h5 class="font-bold text-gray-600">Confidence</h5>
+                                    <p class="text-2xl font-bold text-blue-600" id="confidence-metric">80.0%</p>
+                                    <p class="text-xs text-gray-500">Reliability of the rule</p>
+                                </div>
+                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                    <h5 class="font-bold text-gray-600">Lift</h5>
+                                    <p class="text-2xl font-bold text-green-600" id="lift-metric">6.67</p>
+                                    <p class="text-xs text-gray-500">Strength of the relationship</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-12">
+                            <h4 class="font-bold text-lg text-gray-700 mb-4">Case Studies in Action</h4>
+                            <div class="overflow-x-auto bg-gray-50 p-4 rounded-lg">
+                               <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-100">
+                                        <tr>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Insight (If-Then Rule)</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action Taken</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Result</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        <tr>
+                                            <td class="px-4 py-4 whitespace-normal font-medium text-gray-900">Amazon</td>
+                                            <td class="px-4 py-4 whitespace-normal text-sm text-gray-500">If customers buy gardening books, they often also purchase soil or planters.</td>
+                                            <td class="px-4 py-4 whitespace-normal text-sm text-gray-500">Created the "Frequently Bought Together" recommendation engine.</td>
+                                            <td class="px-4 py-4 whitespace-normal text-sm text-gray-500 font-bold">Over 35% of sales driven by this feature.</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-4 whitespace-normal font-medium text-gray-900">Local Coffee Shop</td>
+                                            <td class="px-4 py-4 whitespace-normal text-sm text-gray-500">If customers buy iced coffees, they frequently also buy snack boxes.</td>
+                                            <td class="px-4 py-4 whitespace-normal text-sm text-gray-500">Created a "Cool & Crispy" combo package at a slight discount.</td>
+                                            <td class="px-4 py-4 whitespace-normal text-sm text-gray-500 font-bold">22% increase in AOV within three months.</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-4 whitespace-normal font-medium text-gray-900">SPAR (Austria)</td>
+                                            <td class="px-4 py-4 whitespace-normal text-sm text-gray-500">Analyzed weather, marketing, and seasonality to predict demand.</td>
+                                            <td class="px-4 py-4 whitespace-normal text-sm text-gray-500">Optimized inventory quantities per shop based on AI predictions.</td>
+                                            <td class="px-4 py-4 whitespace-normal text-sm text-gray-500 font-bold">>90% prediction accuracy; reduced food waste.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: The AI Playbook -->
+        <section id="playbook" class="mt-20">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800">Your AI Pattern Recognition Playbook</h2>
+                <p class="mt-4 text-lg text-gray-600 max-w-4xl mx-auto">Harnessing these patterns starts with asking the right questions. Use this framework to identify the most valuable opportunities within your organization.</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+                 <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">AI Pattern</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Key Business Question It Answers</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Primary Applications</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Anomaly Detection</td>
+                                <td class="px-6 py-4 whitespace-normal text-sm text-gray-500">"What critical, unforeseen event is about to disrupt my operations?"</td>
+                                <td class="px-6 py-4 whitespace-normal text-sm text-gray-500">Manufacturing, Finance (Fraud), Supply Chain, IT</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Sequential Pattern Mining</td>
+                                <td class="px-6 py-4 whitespace-normal text-sm text-gray-500">"What sequence of behaviors leads to conversion or churn?"</td>
+                                <td class="px-6 py-4 whitespace-normal text-sm text-gray-500">E-commerce, Subscription Services, Marketing</td>
+                            </tr>
+                             <tr>
+                                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Behavioral Clustering</td>
+                                <td class="px-6 py-4 whitespace-normal text-sm text-gray-500">"Who are my real customer segments based on how they act, not who they are?"</td>
+                                <td class="px-6 py-4 whitespace-normal text-sm text-gray-500">Retail, Media (Personalization), Product Development</td>
+                            </tr>
+                             <tr>
+                                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Affinity Analysis</td>
+                                <td class="px-6 py-4 whitespace-normal text-sm text-gray-500">"What products or services are my customers likely to purchase together?"</td>
+                                <td class="px-6 py-4 whitespace-normal text-sm text-gray-500">Retail (Bundling), E-commerce (Recommendations), Marketing (Promotions)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                 <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-lg text-gray-800 mb-2">1. Lead with the Question</h4>
+                        <p class="text-sm text-gray-600">Start with a critical business challenge, not the algorithm. Let the problem dictate the right AI pattern to apply.</p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-lg text-gray-800 mb-2">2. Unify Your Data</h4>
+                        <p class="text-sm text-gray-600">AI is only as smart as the data it learns from. Breaking down data silos is the essential foundation for any advanced analytics.</p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-lg text-gray-800 mb-2">3. Champion Data Storytelling</h4>
+                        <p class="text-sm text-gray-600">Translate complex findings into compelling business narratives. The goal is to drive action, not just present numbers.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white mt-16">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-gray-500">
+            <p>&copy; 2025 AI Insights. This is an interactive educational resource.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const navButtons = document.querySelectorAll('.nav-button');
+            const contentPanels = document.querySelectorAll('.content-panel');
+            let anomalyChart;
+
+            // --- Navigation Logic ---
+            navButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetPanelId = 'panel-' + button.id.split('-')[1];
+                    navButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    contentPanels.forEach(panel => {
+                        panel.classList.toggle('active', panel.id === targetPanelId);
+                    });
+                });
+            });
+
+            // --- Anomaly Hunter Logic ---
+            const createAnomalyChart = () => {
+                const ctx = document.getElementById('anomalyChart').getContext('2d');
+                const initialData = Array(20).fill(null).map(() => 50 + Math.random() * 10);
+                
+                if(anomalyChart) anomalyChart.destroy();
+
+                anomalyChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: Array(20).fill(null).map((_, i) => `T-${19 - i}`),
+                        datasets: [{
+                            label: 'Machine Temperature (°C)',
+                            data: initialData,
+                            borderColor: 'rgb(59, 130, 246)',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            fill: true, tension: 0.4, pointRadius: 3,
+                            pointBackgroundColor: 'rgb(59, 130, 246)'
+                        }]
+                    },
+                    options: {
+                        responsive: true, maintainAspectRatio: false,
+                        scales: { y: { beginAtZero: false, suggestedMin: 40, suggestedMax: 100 } },
+                        plugins: { legend: { display: false }, tooltip: { enabled: true } }
+                    }
+                });
+            };
+
+            document.getElementById('trigger-anomaly-btn').addEventListener('click', () => {
+                if (!anomalyChart) return;
+                const newData = Array(17).fill(null).map(() => 50 + Math.random() * 10);
+                newData.push(85 + Math.random() * 5, 90 + Math.random() * 5, 70 + Math.random() * 5);
+                const newPointColors = Array(17).fill('rgb(59, 130, 246)');
+                newPointColors.push('rgb(239, 68, 68)', 'rgb(239, 68, 68)', 'rgb(249, 115, 22)');
+
+                anomalyChart.data.datasets[0].data = newData;
+                anomalyChart.data.datasets[0].pointBackgroundColor = newPointColors;
+                anomalyChart.data.datasets[0].pointRadius = newData.map((_, i) => i > 16 ? 6 : 3);
+                anomalyChart.update();
+            });
+
+            // --- Path Analyzer Logic ---
+            document.getElementById('show-path-btn').addEventListener('click', () => {
+                document.querySelectorAll('.path-step').forEach((step, index) => {
+                    step.classList.remove('highlight');
+                    setTimeout(() => step.classList.add('highlight'), index * 400);
+                });
+            });
+
+            // --- Persona Architect Logic ---
+            document.getElementById('reveal-persona-btn').addEventListener('click', () => {
+                const demoCard = document.getElementById('demographic-card');
+                const personaContainer = document.getElementById('persona-card-container');
+                demoCard.classList.toggle('hidden');
+                personaContainer.classList.toggle('hidden');
+                document.getElementById('reveal-persona-btn').textContent = personaContainer.classList.contains('hidden') ? "Click to Reveal AI Personas" : "Show Traditional View";
+            });
+
+            // --- Affinity Analysis Logic ---
+            const totalBaskets = 1000;
+            const milkSlider = document.getElementById('baskets-with-milk');
+            const breadSlider = document.getElementById('baskets-with-bread');
+            const bothSlider = document.getElementById('baskets-with-both');
+            const milkValue = document.getElementById('baskets-with-milk-value');
+            const breadValue = document.getElementById('baskets-with-bread-value');
+            const bothValue = document.getElementById('baskets-with-both-value');
+            
+            const supportMetricEl = document.getElementById('support-metric');
+            const confidenceMetricEl = document.getElementById('confidence-metric');
+            const liftMetricEl = document.getElementById('lift-metric');
+
+            function calculateAffinityMetrics() {
+                const numMilk = parseInt(milkSlider.value);
+                const numBread = parseInt(breadSlider.value);
+                const numBoth = parseInt(bothSlider.value);
+
+                milkValue.textContent = numMilk;
+                breadValue.textContent = numBread;
+                bothValue.textContent = numBoth;
+                bothSlider.max = Math.min(numMilk, numBread); // Ensure 'both' can't be more than either individual item
+
+                const support = (numBoth / totalBaskets) * 100;
+                const confidence = numMilk > 0 ? (numBoth / numMilk) * 100 : 0;
+                const lift = (numMilk > 0 && numBread > 0) ? (support / 100) / ((numMilk / totalBaskets) * (numBread / totalBaskets)) : 0;
+                
+                supportMetricEl.textContent = `${support.toFixed(1)}%`;
+                confidenceMetricEl.textContent = `${confidence.toFixed(1)}%`;
+                liftMetricEl.textContent = lift.toFixed(2);
+                
+                if (lift > 1) {
+                    liftMetricEl.classList.remove('text-red-600');
+                    liftMetricEl.classList.add('text-green-600');
+                } else {
+                    liftMetricEl.classList.remove('text-green-600');
+                    liftMetricEl.classList.add('text-red-600');
+                }
+            }
+
+            [milkSlider, breadSlider, bothSlider].forEach(slider => {
+                slider.addEventListener('input', calculateAffinityMetrics);
+            });
+
+            // --- Initial Load ---
+            const init = () => {
+                createAnomalyChart();
+                calculateAffinityMetrics();
+                document.getElementById('nav-anomaly').click();
+            };
+
+            init();
+        });
+    </script>
 </body>
 </html>
